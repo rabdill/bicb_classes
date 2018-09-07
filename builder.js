@@ -15,9 +15,10 @@ function build_page() {
     for(var section of entry["sections"]) { // each section
       row = refresh.insertRow(-1);
       throw_out = false;
-      for(var i=0, col; col=cols[i]; i++) {
-        cell = row.insertCell(i);
+      for(var col of cols) { // fill in each column of the table
+        cell = row.insertCell(-1);
         if(col == "time") {
+          building = "";
           contents = "";
           for(var k=0, time; time=section["times"][k]; k++) { // each meeting time for a section
             for(var j=0, day; day=time["days"][j]; j++) { // each day that it meets at that time
@@ -30,17 +31,20 @@ function build_page() {
                 contents += "/";
               }
             }
+            building = time["location"];
             contents += ": " + time["start"] + "&ndash;" + time["end"]
             if(k < section["times"].length - 1) {
               contents += " and ";
             }
           }
+          cell.innerHTML = contents;
+          cell = row.insertCell(5);
+          cell.innerHTML = building;
         } else if(col == "type") {
-          contents = section["type"];
+          cell.innerHTML = section["type"];
         } else {
-          contents = entry[col];
+          cell.innerHTML = entry[col];
         }
-        cell.innerHTML = contents;
       }
       if(throw_out) {
         row = refresh.deleteRow(refresh.rows.length - 1);
