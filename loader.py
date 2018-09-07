@@ -1,5 +1,7 @@
 import json
 
+# (based on data from http://asr-custom.umn.edu/courses/ )
+
 def load_all_course_info(semester):
   with open("approved.json", "r") as f:
     contents = f.read()
