@@ -1,12 +1,13 @@
 import json
+import sys
 
 # (based on data from http://asr-custom.umn.edu/courses/ )
 
-def load_all_course_info(semester):
+def load_all_course_info(filename):
   with open("approved.json", "r") as f:
     contents = f.read()
     approved = json.loads(contents)
-  with open("{}.json".format(semester), "r") as f:
+  with open(filename, "r") as f:
     contents = f.read()
     parsed = json.loads(contents)
   return approved, parsed
@@ -53,7 +54,10 @@ def process_approved_entry(course):
   return entry
 
 if __name__ == "__main__":
-  approved, all_courses = load_all_course_info("2018_fall")
+  if len(sys.argv) < 2:
+    print("Source data filename required.")
+    exit(1)
+  approved, all_courses = load_all_course_info(sys.argv[1])
 
   final = []
   for course in all_courses["courses"]:
