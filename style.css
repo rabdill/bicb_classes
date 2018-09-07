@@ -32,8 +32,11 @@ td, th {
   padding: 5px;
 }
 
-a {
-  text-decoration: none;
+tr:nth-child(even) {
+  background-color: #d5d6d2;
+}
+tr:nth-child(odd) {
+  background-color: #FFF;
 }
 
 a:link {
