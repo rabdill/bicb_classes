@@ -1,0 +1,45 @@
+/* Styles inspired by
+https://university-relations.umn.edu/resources/homesite-style-tile#
+*/
+
+#header {
+  margin: 0px;
+  padding: 15px;
+  background-color: #7a0019;
+  line-height: 2.35em;
+}
+
+h1 {
+  color: #ffd75f;
+}
+
+body {
+  font-family: 'Raleway', sans-serif;
+  color: #404d5b;
+
+  letter-spacing: 0.025em;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #8a8a8a;
+}
+
+td, th {
+  padding: 5px;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:link {
+  color: #0095b6;
+}
+
+a:visited {
+  color: #7a0019;
+}

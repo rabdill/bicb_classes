@@ -38,7 +38,7 @@ def process_approved_entry(course):
   }
   for section in course["sections"]:
     if "meeting_patterns" not in section: # no meetings this semester
-      continue
+      return None
     entry["sections"].append({
       "type": section["component"],
       "times": pull_meeting_times(section["meeting_patterns"])
@@ -53,7 +53,10 @@ if __name__ == "__main__":
     dept = course["subject"]["subject_id"]
     num = course["catalog_number"]
     if dept in approved and num in approved[dept]:
-      final.append(process_approved_entry(course)) # we're done one class
+      processed = process_approved_entry(course)
+      if processed is not None:
+        final.append(processed)
   # done evaluating all classes:
-  with open("done.json", "w") as f:
+  with open("final.js", "w") as f:
+    f.write("var data = ") # I know, I know
     f.write(json.dumps(final))
