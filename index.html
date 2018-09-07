@@ -11,7 +11,24 @@
     </div>
     <p><em>All the approved BICB courses available this semester.</p>
     <p>Under construction. If you find a bug, feel free to report it as a <a href="https://github.com/rabdill/umn_stem_seminars">GitHub issue</a> (or a pull request!) or email Rich Abdill at rabdill@umn.edu.</em> <strong>This page is not an official university publication. I just thought it would be nice.</strong>
-    <table id="results">
+
+    <div>
+      <h2>Filters</h2>
+      <div>
+          <p>Exclude classes that meet on:<br>
+            <input type="checkbox" name="exclude_day" value="m" onclick="build_page()">Monday<br>
+            <input type="checkbox" name="exclude_day" value="t" onclick="build_page()">Tuesday<br>
+            <input type="checkbox" name="exclude_day" value="w" onclick="build_page()">Wednesday<br>
+            <input type="checkbox" name="exclude_day" value="th" onclick="build_page()">Thursday<br>
+            <input type="checkbox" name="exclude_day" value="f" onclick="build_page()">Friday
+          </p>
+          <!-- <p>Only show classes that fulfill requirement:
+              <input type="checkbox" name="exclude_day" value="f">Friday
+          </p> -->
+      </div>
+
+    </div>
+    <table id="resultsTable">
       <thead>
         <tr>
           <th>Course number</th>
@@ -22,6 +39,7 @@
           <th>Meeting times</th>
         </tr>
       </thead>
+      <tbody id="results"></tbody>
     </table>
 
     <script src="final.js"></script>
