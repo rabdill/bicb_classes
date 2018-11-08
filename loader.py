@@ -2,6 +2,8 @@ import json
 import sys
 
 # (based on data from http://asr-custom.umn.edu/courses/ )
+# example: https://courses.umn.edu/campuses/umntc/terms/1193/courses.json
+# term numbers: https://classroom.umn.edu/scheduling/classes/session-dates
 
 def load_all_course_info(filename):
   with open("approved.json", "r") as f:
@@ -12,28 +14,27 @@ def load_all_course_info(filename):
     parsed = json.loads(contents)
   return approved, parsed
 
-def pull_meeting_times(meetings):
+def pull_meeting_times(meetings, location):
   results = []
   for pattern in meetings:
     # the data is all over the place in these
-    if "start_time" not in pattern or pattern["start_time"] is None or pattern["start_time"] == '00:00':
+    if "start_time" not in pattern or pattern["start_time"] is None:# or pattern["start_time"] == '00:00':
       print("Bad start time; assuming whole class entry is incorrect.")
       return None
-    if "location" not in pattern:
-      print("\n\nSomething's fishy with this one:")
-      print(pattern)
-      return None
-    results.append({
+    answer = {
       "start": pattern["start_time"],
       "end": pattern["end_time"],
-      "location": pattern["location"]["description"],
-      "days": [d["abbreviation"] for d in pattern["days"]]
-    })
+      "days": [d["abbreviation"] for d in pattern["days"]],
+      "location": location
+    }
+    if "location" in pattern and "description" in pattern["location"]:
+      answer["location"] = pattern["location"]["description"]
+    results.append(answer)
   return results
 
 def process_approved_entry(course):
   course_name = "{} {}".format(course["subject"]["subject_id"], course["catalog_number"])
-  print("Found one! {}".format(course_name))
+  print("\n\nFound one! {}".format(course_name))
   entry = {
     "catalog": course_name,
     "title": course["title"],
@@ -44,8 +45,9 @@ def process_approved_entry(course):
   for section in course["sections"]:
     if "meeting_patterns" not in section: # no meetings this semester
       return None
-    times = pull_meeting_times(section["meeting_patterns"])
+    times = pull_meeting_times(section["meeting_patterns"], section["location"])
     if times is None:
+      print("WARN: Didn't find any sections")
       return None
     entry["sections"].append({
       "type": section["component"],
@@ -65,7 +67,7 @@ if __name__ == "__main__":
     num = course["catalog_number"]
     if dept in approved and num in approved[dept]:
       processed = process_approved_entry(course)
-      if processed is not None:
+      if processed is not None and len(processed["sections"]) > 0:
         final.append(processed)
   # done evaluating all classes:
   with open("final.js", "w") as f:
