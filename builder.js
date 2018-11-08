@@ -32,7 +32,9 @@ function build_page() {
               }
             }
             building = time["location"];
-            contents += ": " + time["start"] + "&ndash;" + time["end"]
+            if(time["start"] != "00:00") {
+              contents += ": " + time["start"] + "&ndash;" + time["end"]
+            }
             if(k < section["times"].length - 1) {
               contents += " and ";
             }
