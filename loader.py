@@ -36,7 +36,7 @@ def pull_meeting_times(meetings, location):
 
 def process_approved_entry(course):
   course_name = "{} {}".format(course["subject"]["subject_id"], course["catalog_number"])
-  print("\n\nFound one! {}".format(course_name))
+  print("Found one! {}".format(course_name))
   entry = {
     "catalog": course_name,
     "title": course["title"],
@@ -44,17 +44,20 @@ def process_approved_entry(course):
     "credits": course["credits_minimum"],
     "sections": []
   }
+  if "sections" not in course or len(course["sections"]) == 0:
+    print("  **WARN**: Didn't find any sections")
+    return entry
   for section in course["sections"]:
     if "meeting_patterns" not in section: # no meetings this semester
       return None
     times = pull_meeting_times(section["meeting_patterns"], section["location"])
     if times is None:
-      print("WARN: Didn't find any sections")
-      return None
-    entry["sections"].append({
-      "type": section["component"],
-      "times": times
-    })
+      print("  WARN: Didn't find any times for this section")
+    else:
+      entry["sections"].append({
+        "type": section["component"],
+        "times": times
+      })
   return entry
 
 if __name__ == "__main__":
@@ -69,7 +72,7 @@ if __name__ == "__main__":
     num = course["catalog_number"]
     if dept in approved and num in approved[dept]:
       processed = process_approved_entry(course)
-      if processed is not None and len(processed["sections"]) > 0:
+      if processed is not None:
         final.append(processed)
   # done evaluating all classes:
   with open("final.js", "w") as f:
