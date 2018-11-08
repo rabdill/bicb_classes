@@ -20,7 +20,9 @@ def pull_meeting_times(meetings, location):
     # the data is all over the place in these
     if "start_time" not in pattern or pattern["start_time"] is None:# or pattern["start_time"] == '00:00':
       print("Bad start time; assuming whole class entry is incorrect.")
-      return None
+      pattern["start_time"] = ""
+      pattern["end_time"] = ""
+      # return None
     answer = {
       "start": pattern["start_time"],
       "end": pattern["end_time"],

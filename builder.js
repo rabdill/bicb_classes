@@ -20,6 +20,7 @@ function build_page() {
         if(col == "time") {
           building = "";
           contents = "";
+          printed_time = false;
           for(var k=0, time; time=section["times"][k]; k++) { // each meeting time for a section
             for(var j=0, day; day=time["days"][j]; j++) { // each day that it meets at that time
               if(exclude_days.includes(day)) {
@@ -32,8 +33,16 @@ function build_page() {
               }
             }
             building = time["location"];
-            if(time["start"] != "00:00") {
+            if(time["start"] != "00:00" && time["end"] != "") {
+              printed_time = true;
               contents += ": " + time["start"] + "&ndash;" + time["end"]
+            } else {
+              if(printed_time == false) {
+                contents += " times unknown";
+                printed_time = true;
+              } else {
+                contents = contents.substring(0, contents.length - 4)
+              }
             }
             if(k < section["times"].length - 1) {
               contents += " and ";
